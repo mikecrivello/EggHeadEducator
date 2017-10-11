@@ -4,7 +4,7 @@
  * Student ID: 1205570856
  * Team: 7
  * Recitation: 6
- * Description: Companion class that displays avatar with different moods
+ * Description: Universe class holds all Jpanel components
  */
 
 package eggheadeducator;
@@ -27,6 +27,8 @@ import java.awt.GridBagLayout;
 import javax.swing.event.ChangeListener;
 //import net.miginfocom.swing.MigLayout;
 import java.awt.Window.Type;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Universe extends JFrame {
 
@@ -110,6 +112,18 @@ public class Universe extends JFrame {
 		label.setBounds(566, 508, 270, 156);
 		label.setFont(new Font("Courier New", 1, 20));
 		contentPane.add(label);
+		
+		JButton btnGradeBook = new JButton("View Grade Book");
+		btnGradeBook.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				GradeBook gradeBook = new GradeBook();
+				gradeBook.setVisible(true);
+				
+			}
+		});
+		btnGradeBook.setBounds(97, 846, 129, 38);
+		contentPane.add(btnGradeBook);
 		}
 	}
 	
