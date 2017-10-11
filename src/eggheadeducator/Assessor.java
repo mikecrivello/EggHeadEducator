@@ -12,6 +12,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.swing.*;
 import javax.swing.text.Document;
@@ -78,117 +81,174 @@ else
 
 public void menu()
 {
-String[] menus = {"Answer 1", "Answer 2", "Answer 3" , "Answer 4"};
-menu = new JComboBox(menus);
+	JPanel panel = new JPanel();
+	answerPanel.setLayout(new BoxLayout(answerPanel, BoxLayout.Y_AXIS));
+	
+	JButton hint = new JButton("HINT");
+	JButton research = new JButton("RESEARCH");
+	hint.setPreferredSize(new Dimension(100, 20));
+	research.setPreferredSize(new Dimension(100, 20));
+	panel.add(hint);
+	panel.add(research);
+	
+	String[] menus = {"Answer 1", "Answer 2", "Answer 3" , "Answer 4"};
+	menu = new JComboBox(menus);
+	menu.setPreferredSize(new Dimension(250, 200));
+	
+	answerPanel.add(menu);
+	answerPanel.add(Box.createRigidArea(new Dimension(0,100)));
+	answerPanel.add(panel);
 
-answerPanel.add(menu);
-menu.addActionListener(new ComboBoxListener());
+	menu.addActionListener(new ComboBoxListener());
+	
+	hint.addActionListener(new HintButtonListener());
+	research.addActionListener(new ResearchButtonListener());
 }
 
 private class ComboBoxListener implements ActionListener
 {
-public void actionPerformed(ActionEvent event)
-{
-	String type = (String) menu.getSelectedItem();
+	public void actionPerformed(ActionEvent event)
+	{
+		String type = (String) menu.getSelectedItem();
 	
-	if(type.equals("Answer 1"))
-	{
-		JOptionPane.showMessageDialog(null, "Answer 1");
-	}
-	else if(type.equals("Answer 2"))
-	{
-		JOptionPane.showMessageDialog(null, "Answer 2");
-	}
-	else if(type.equals("Answer 3"))
-	{
-		JOptionPane.showMessageDialog(null, "Answer 3");
-	}
-	else if(type.equals("Answer 4"))
-	{
-		JOptionPane.showMessageDialog(null, "Answer 4");
+		if(type.equals("Answer 1"))
+		{
+			JOptionPane.showMessageDialog(null, "Answer 1");
+		}
+		else if(type.equals("Answer 2"))
+		{
+			JOptionPane.showMessageDialog(null, "Answer 2");
+		}
+		else if(type.equals("Answer 3"))
+		{
+			JOptionPane.showMessageDialog(null, "Answer 3");
+		}
+		else if(type.equals("Answer 4"))
+		{
+			JOptionPane.showMessageDialog(null, "Answer 4");
+		}
 	}
 }
-}
+
 
 public void checkboxes()
 {
-check1 = new JCheckBox("Answer 1");
-check2 = new JCheckBox("Answer 2");
-check3 = new JCheckBox("Answer 3");
-check4 = new JCheckBox("Answer 4");
-doneButton = new JButton("DONE!");
+	JPanel panel = new JPanel();
+	JPanel panel1 = new JPanel();
+	
+	answerPanel.setLayout(new BoxLayout(answerPanel, BoxLayout.Y_AXIS));
+	
+	JButton hint = new JButton("HINT");
+	JButton research = new JButton("RESEARCH");
+	hint.setPreferredSize(new Dimension(100, 20));
+	research.setPreferredSize(new Dimension(100, 20));
+	panel.add(hint);
+	panel.add(research);
+	
+	check1 = new JCheckBox("Answer 1");
+	check2 = new JCheckBox("Answer 2");
+	check3 = new JCheckBox("Answer 3");
+	check4 = new JCheckBox("Answer 4");
+	doneButton = new JButton("DONE!");
 
-answerPanel.setLayout(new GridLayout(5, 1));
+	panel1.setLayout(new GridLayout(5, 1));
+	panel1.setPreferredSize(new Dimension(400, 200));
 
-answerPanel.add(check1);
-answerPanel.add(check2);
-answerPanel.add(check3);
-answerPanel.add(check4);
-answerPanel.add(doneButton);
+	panel1.add(check1);
+	panel1.add(check2);
+	panel1.add(check3);
+	panel1.add(check4);
+	panel1.add(doneButton);
 
-check1.addItemListener(new CheckBoxListener());
-check2.addItemListener(new CheckBoxListener());
-check3.addItemListener(new CheckBoxListener());
-check4.addItemListener(new CheckBoxListener());
-doneButton.addActionListener(new DoneButtonListener());
+	answerPanel.add(panel1);
+	answerPanel.add(panel);
+	
+	check1.addItemListener(new CheckBoxListener());
+	check2.addItemListener(new CheckBoxListener());
+	check3.addItemListener(new CheckBoxListener());
+	check4.addItemListener(new CheckBoxListener());
+	doneButton.addActionListener(new DoneButtonListener());
+	
+	hint.addActionListener(new HintButtonListener());
+	research.addActionListener(new ResearchButtonListener());
 }
 
 private class CheckBoxListener implements ItemListener
 {
-public void itemStateChanged(ItemEvent event)
-{
-	result = "You choose: ";
+	public void itemStateChanged(ItemEvent event)
+	{
+		result = "You choose: ";
 	
-	if(check1.isSelected())
-	{
-		result += "Answer 1 ";
-	}
-	if(check2.isSelected())
-	{
-		result += "Answer 2 ";
-	}
-	if(check3.isSelected())
-	{
-		result += "Answer 3 ";
-	}
-	if(check4.isSelected())
-	{
-		result += "Answers 4 ";
-	}
-}
+		if(check1.isSelected())
+		{
+			result += "Answer 1 ";
+		}
+		if(check2.isSelected())
+		{
+			result += "Answer 2 ";
+		}
+		if(check3.isSelected())
+		{
+			result += "Answer 3 ";
+		}
+		if(check4.isSelected())
+		{
+			result += "Answers 4 ";
+		}
+	}		
 }
 
 private class DoneButtonListener implements ActionListener
 {
-public void actionPerformed(ActionEvent event)
-{
-	 JOptionPane.showMessageDialog(null, result);
-}
+	public void actionPerformed(ActionEvent event)
+	{
+		JOptionPane.showMessageDialog(null, result);
+	}
 }
 
 public void buttons()
 {
-button1 = new JButton("Answer 1");
-button2 = new JButton("Answer 2");
-button3 = new JButton("Answer 3");
-button4 = new JButton("Answer 4");
+	JPanel panel = new JPanel();
+	JPanel panel1 = new JPanel();
+	
+	answerPanel.setLayout(new BoxLayout(answerPanel, BoxLayout.Y_AXIS));
+	
+	JButton hint = new JButton("HINT");
+	JButton research = new JButton("RESEARCH");
+	hint.setPreferredSize(new Dimension(100, 20));
+	research.setPreferredSize(new Dimension(100, 20));
+	panel.add(hint);
+	panel.add(research);
+	
+	button1 = new JButton("Answer 1");
+	button2 = new JButton("Answer 2");
+	button3 = new JButton("Answer 3");
+	button4 = new JButton("Answer 4");
 
-answerPanel.setLayout(new GridLayout(4, 1));
+	panel1.setLayout(new GridLayout(2, 2));
+	panel1.setPreferredSize(new Dimension(400, 150));
 
-button1.setActionCommand("answer1");
-button2.setActionCommand("answer2");
-button3.setActionCommand("answer3");
-button4.setActionCommand("answer4");
+	button1.setActionCommand("answer1");
+	button2.setActionCommand("answer2");
+	button3.setActionCommand("answer3");
+	button4.setActionCommand("answer4");
 
-answerPanel.add(button1);
-answerPanel.add(button2);
-answerPanel.add(button3);
-answerPanel.add(button4);
+	panel1.add(button1);
+	panel1.add(button2);
+	panel1.add(button3);
+	panel1.add(button4);
 
-button1.addActionListener(new ButtonListener());
-button2.addActionListener(new ButtonListener());
-button3.addActionListener(new ButtonListener());
-button4.addActionListener(new ButtonListener());
+	answerPanel.add(panel1);
+	answerPanel.add(Box.createRigidArea(new Dimension(0,30)));
+	answerPanel.add(panel);
+
+	button1.addActionListener(new ButtonListener());
+	button2.addActionListener(new ButtonListener());
+	button3.addActionListener(new ButtonListener());
+	button4.addActionListener(new ButtonListener());
+	
+	hint.addActionListener(new HintButtonListener());
+	research.addActionListener(new ResearchButtonListener());
 }
 
 private class ButtonListener implements ActionListener
@@ -216,12 +276,26 @@ public void actionPerformed(ActionEvent event)
 
 public void textfield()
 {
-text = new JTextField();
+	JPanel panel = new JPanel();
+	answerPanel.setLayout(new BoxLayout(answerPanel, BoxLayout.Y_AXIS));
+	
+	JButton hint = new JButton("HINT");
+	JButton research = new JButton("RESEARCH");
+	hint.setPreferredSize(new Dimension(100, 20));
+	research.setPreferredSize(new Dimension(100, 20));
+	panel.add(hint);
+	panel.add(research);
+	
+	text = new JTextField();
+	text.setPreferredSize(new Dimension(400, 100));
+	
+	answerPanel.add(text);
+	answerPanel.add(Box.createRigidArea(new Dimension(0,10)));
+	answerPanel.add(panel);
 
-text.setPreferredSize(new Dimension(340, 340));
-answerPanel.add(text);
-
-text.addActionListener(new TextFieldListener());
+	text.addActionListener(new TextFieldListener());
+	hint.addActionListener(new HintButtonListener());
+	research.addActionListener(new ResearchButtonListener());
 }
 
 private class TextFieldListener implements ActionListener
@@ -236,13 +310,34 @@ public void actionPerformed(ActionEvent event)
 }
 }
 
+private class HintButtonListener implements ActionListener
+{
+	public void actionPerformed(ActionEvent event)
+	{
+		JOptionPane.showMessageDialog(null, "Showing Hints!");
+	}
+}
+
+private class ResearchButtonListener implements ActionListener 
+{
+	public void actionPerformed(ActionEvent event)
+	{
+		Desktop d = Desktop.getDesktop();
+		try {
+			d.browse(new URI("http://google.com"));
+		} catch (IOException | URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Failed to load Webpage!");
+		}
+	}
+}
+
 public void changeState(int state) 
 {
-questionPanel.removeAll();
-answerPanel.removeAll();
-this.state = state;
-states();
+	questionPanel.removeAll();
+	answerPanel.removeAll();
+	this.state = state;
+	states();
 }
 }
-
-
