@@ -98,26 +98,30 @@ public class Tutor extends JPanel{
 	{
 		this.state = 0;
 		this.jep = new JEditorPane();
+		
 		this.jep.setBounds(566, 20, 500, 350);
 		this.jep.setSize(500, 350);											//set size of panel
 		this.jep.setVisible(true);
+		
 		changeState(0);
+		
 		JScrollPane scrollPane = new JScrollPane(jep);
 		c.setVisible( true );
 		add(scrollPane);
-        this.setBounds( 0, 0, 200, 200);
+        	this.setBounds( 0, 0, 200, 200);
 		scrollPane.setVisible(true);
+		
 		//add(scrollPane);
 		//scrollPane.bounds()
 		//this.jep.add(scrollPane);
 		//scrollPane.setVerticalScrollBar();
+		
 		this.jep.setEditable(true);
 		c.add(this.jep);
+		
 		//this.jep.resize(700, 500);
-	
 		//removeAll();
-	
-	    //changePage(0);
+		//changePage(0);
 	    
 	}
 }
