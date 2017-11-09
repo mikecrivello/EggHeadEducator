@@ -22,7 +22,6 @@ import javax.swing.text.Document;
 public class Assessor extends JPanel
 {
 private int state = 0;
-private String result;
 private JPanel questionPanel;
 private JPanel answerPanel;
 private JComboBox menu;
@@ -40,14 +39,14 @@ private JTextField text;
 
 public Assessor()
 {
-questionPanel = new JPanel();
-questionPanel.setPreferredSize(new Dimension(350, 100));
+	questionPanel = new JPanel();
+	questionPanel.setPreferredSize(new Dimension(350, 100));
 
-answerPanel = new JPanel();
-answerPanel.setPreferredSize(new Dimension(500, 220));
+	answerPanel = new JPanel();
+	answerPanel.setPreferredSize(new Dimension(500, 220));
 
-JSplitPane sp = new JSplitPane(JSplitPane.VERTICAL_SPLIT, questionPanel, answerPanel);
-add(sp);
+	JSplitPane sp = new JSplitPane(JSplitPane.VERTICAL_SPLIT, questionPanel, answerPanel);
+	add(sp);
 }
 
 
@@ -91,7 +90,7 @@ public void menu()
 	panel.add(hint);
 	panel.add(research);
 	
-	String[] menus = {"Answer 1", "Answer 2", "Answer 3" , "Answer 4"};
+	String[] menus = {"Answer 1", "Correct Answer", "Answer 3" , "Answer 4"};
 	menu = new JComboBox(menus);
 	menu.setPreferredSize(new Dimension(250, 200));
 	
@@ -110,22 +109,15 @@ private class ComboBoxListener implements ActionListener
 	public void actionPerformed(ActionEvent event)
 	{
 		String type = (String) menu.getSelectedItem();
-	
-		if(type.equals("Answer 1"))
+		if(type.equals("Correct Answer"))
 		{
-			JOptionPane.showMessageDialog(null, "Answer 1");
+			Message correctMessage = new CorrectAnswer(new BasicMessage(type, true));
+			correctMessage.doSomething();
 		}
-		else if(type.equals("Answer 2"))
+		else
 		{
-			JOptionPane.showMessageDialog(null, "Answer 2");
-		}
-		else if(type.equals("Answer 3"))
-		{
-			JOptionPane.showMessageDialog(null, "Answer 3");
-		}
-		else if(type.equals("Answer 4"))
-		{
-			JOptionPane.showMessageDialog(null, "Answer 4");
+			Message wrongMessage = new WrongAnswer(new BasicMessage(type, false));
+			wrongMessage.doSomething();
 		}
 	}
 }
@@ -146,8 +138,8 @@ public void checkboxes()
 	panel.add(research);
 	
 	check1 = new JCheckBox("Answer 1");
-	check2 = new JCheckBox("Answer 2");
-	check3 = new JCheckBox("Answer 3");
+	check2 = new JCheckBox("Correct Answer");
+	check3 = new JCheckBox("Correct Answer");
 	check4 = new JCheckBox("Answer 4");
 	doneButton = new JButton("DONE!");
 
@@ -163,46 +155,46 @@ public void checkboxes()
 	answerPanel.add(panel1);
 	answerPanel.add(panel);
 	
-	check1.addItemListener(new CheckBoxListener());
-	check2.addItemListener(new CheckBoxListener());
-	check3.addItemListener(new CheckBoxListener());
-	check4.addItemListener(new CheckBoxListener());
 	doneButton.addActionListener(new DoneButtonListener());
 	
 	hint.addActionListener(new HintButtonListener());
 	research.addActionListener(new ResearchButtonListener());
 }
 
-private class CheckBoxListener implements ItemListener
-{
-	public void itemStateChanged(ItemEvent event)
-	{
-		result = "You choose: ";
-	
-		if(check1.isSelected())
-		{
-			result += "Answer 1 ";
-		}
-		if(check2.isSelected())
-		{
-			result += "Answer 2 ";
-		}
-		if(check3.isSelected())
-		{
-			result += "Answer 3 ";
-		}
-		if(check4.isSelected())
-		{
-			result += "Answers 4 ";
-		}
-	}		
-}
-
 private class DoneButtonListener implements ActionListener
 {
 	public void actionPerformed(ActionEvent event)
 	{
-		JOptionPane.showMessageDialog(null, result);
+		String result = "";
+		
+		if(check2.isSelected() && check3.isSelected() && !check1.isSelected() && !check4.isSelected())
+		{
+			result = check2.getText() + " and " + check3.getText();
+			Message correctMessage = new CorrectAnswer(new BasicMessage(result, true));
+			correctMessage.doSomething();
+		}
+		else
+		{
+			if(check1.isSelected())
+			{
+				result += check1.getText();
+			}
+			if(check2.isSelected())
+			{
+				result += check2.getText();
+			}
+			if(check3.isSelected())
+			{
+				result += check3.getText();
+			}
+			if(check4.isSelected())
+			{
+				result += " " + check4.getText();
+			}
+			
+			Message wrongMessage = new WrongAnswer(new BasicMessage(result, false));
+			wrongMessage.doSomething();
+		}
 	}
 }
 
@@ -221,7 +213,7 @@ public void buttons()
 	panel.add(research);
 	
 	button1 = new JButton("Answer 1");
-	button2 = new JButton("Answer 2");
+	button2 = new JButton("Correct Answer");
 	button3 = new JButton("Answer 3");
 	button4 = new JButton("Answer 4");
 
@@ -229,7 +221,7 @@ public void buttons()
 	panel1.setPreferredSize(new Dimension(400, 150));
 
 	button1.setActionCommand("answer1");
-	button2.setActionCommand("answer2");
+	button2.setActionCommand("correctAnswer");
 	button3.setActionCommand("answer3");
 	button4.setActionCommand("answer4");
 
@@ -255,21 +247,30 @@ private class ButtonListener implements ActionListener
 {
 public void actionPerformed(ActionEvent event)
 {
-	 if("answer1".equals(event.getActionCommand()))
+	String result = "";
+	
+	 if("correctAnswer".equals(event.getActionCommand()))
 	 {
-		 JOptionPane.showMessageDialog(null, "Answer 1");
+		Message correctMessage = new CorrectAnswer(new BasicMessage(button2.getText(), true));
+		correctMessage.doSomething();
 	 }
-	 else if("answer2".equals(event.getActionCommand()))
+	 else
 	 {
-		 JOptionPane.showMessageDialog(null, "Answer 2");
-	 }
-	 else if("answer3".equals(event.getActionCommand()))
-	 {
-		 JOptionPane.showMessageDialog(null, "Answer 3");
-	 }
-	 else if("answer4".equals(event.getActionCommand()))
-	 {
-		 JOptionPane.showMessageDialog(null, "Answer 4");
+		 if("answer1".equals(event.getActionCommand()))
+		 {
+			 result = button1.getText();
+		 }
+		 else if("answer3".equals(event.getActionCommand()))
+		 {
+			 result = button3.getText();
+		 }
+		 else if("answer4".equals(event.getActionCommand()))
+		 {
+			 result = button4.getText();
+		 }
+		 
+		Message wrongMessage = new WrongAnswer(new BasicMessage(result, false));
+		wrongMessage.doSomething();
 	 }
 }
 }
@@ -305,7 +306,16 @@ public void actionPerformed(ActionEvent event)
 {
 	if(text.getDocument() != null)
 	{
-		JOptionPane.showMessageDialog(null, "You just put an answer :)");
+		if(text.getText().equals("Correct Answer"))
+		{
+			Message correctMessage = new CorrectAnswer(new BasicMessage(text.getText(), true));
+			correctMessage.doSomething();
+		}
+		else
+		{
+			Message wrongMessage = new WrongAnswer(new BasicMessage(text.getText(), false));
+			wrongMessage.doSomething();
+		}
 	}
 }
 }
@@ -339,5 +349,126 @@ public void changeState(int state)
 	answerPanel.removeAll();
 	this.state = state;
 	states();
+}
+
+public interface Message
+{
+	public void doSomething();
+}
+
+public class BasicMessage implements Message
+{
+	String answer = "";
+	boolean correctness = true;
+
+	public BasicMessage(String answer, boolean correctness)
+	{
+		this.answer = answer;
+		this.correctness = correctness;
+	}
+
+	public void doSomething()
+	{
+		if(correctness == true)
+		{
+			JOptionPane.showMessageDialog(null, (answer + " is the correct answer! Nice!"));
+		}
+		else
+		{
+			JOptionPane.showMessageDialog(null, (answer + " is not the correct answer! TOO BAD!"));
+		}
+	}
+}
+
+public class MessageDecorator implements Message
+{
+	protected Message message;
+	
+	public MessageDecorator(Message message)
+	{
+		this.message = message;
+	}
+	
+	public void doSomething()
+	{
+		this.message.doSomething();
+	}
+}
+
+public class CorrectAnswer extends MessageDecorator
+{
+	public CorrectAnswer(Message message)
+	{
+		super(message);
+	}
+	
+	public void doSomething()
+	{
+		super.doSomething();
+		if(state == 1)
+		{
+			menu.setBackground(Color.green);
+		}
+		else if(state == 2)
+		{
+			check2.setBackground(Color.green);
+			check3.setBackground(Color.green);
+			check1.setBackground(Color.red);
+			check4.setBackground(Color.red);
+		}
+		else if(state == 3)
+		{
+			button2.setBackground(Color.green);
+			button1.setBackground(Color.red);
+			button3.setBackground(Color.red);
+			button4.setBackground(Color.red);
+		}
+		else if(state == 4)
+		{
+			text.setBackground(Color.green);
+		}
+	}
+}
+
+public class WrongAnswer extends MessageDecorator
+{
+	public WrongAnswer(Message message)
+	{
+		super(message);
+	}
+	
+	public void doSomething()
+	{
+		super.doSomething();
+		if(state == 1)
+		{
+			menu.setBackground(Color.red);
+		}
+		else if(state == 2)
+		{
+			if(check1.isSelected())
+				check1.setBackground(Color.red);
+			
+			if(check2.isSelected())
+				check2.setBackground(Color.red);
+			
+			if(check3.isSelected())
+				check3.setBackground(Color.red);
+			
+			if(check4.isSelected())
+				check4.setBackground(Color.red);
+		}
+		else if(state == 3)
+		{
+			button1.setBackground(Color.red);
+			button2.setBackground(Color.red);
+			button3.setBackground(Color.red);
+			button4.setBackground(Color.red);
+		}
+		else if(state == 4)
+		{
+			text.setBackground(Color.red);
+		}
+	}
 }
 }
