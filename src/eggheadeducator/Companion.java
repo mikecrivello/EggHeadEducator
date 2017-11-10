@@ -12,6 +12,10 @@ import javax.swing.*;
 import java.util.Observer;
 import java.util.Observable;
 
+import eggheadeducator.Assessor.BasicMessage;
+import eggheadeducator.Assessor.Message;
+import eggheadeducator.Assessor.MessageDecorator;
+import eggheadeducator.Assessor.WrongAnswer;
 
 public class Companion extends JPanel implements Runnable, Observer
 {
