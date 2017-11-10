@@ -312,6 +312,7 @@ public class Companion extends JPanel implements Runnable, Observer
 	{
 		// TODO Auto-generated method stub
 		boolean correct = ((AssessorObservable)o).getCorrectness();
+		int wrongAttempt = ((AssessorObservable)o).getWrongAttempt();
 		
 		if(correct)
 		{
@@ -320,7 +321,106 @@ public class Companion extends JPanel implements Runnable, Observer
 		}
 		else
 		{
+			if(wrongAttempt == 1)
+			{
+				//Decorator 1 don't give up!
+				Message dontGiveUp = new DontGiveUp(new BasicMessage());
+				dontGiveUp.doSomething();
+			}
+			else if(wrongAttempt == 2)
+			{
+				//Decorator 2 you can do it!
+				Message youCanDoIt = new YouCanDoIt(new BasicMessage());
+				youCanDoIt.doSomething();
+			}
+			else
+			{
+				//Decorator 3 go home!
+				Message goHome = new GoHome(new BasicMessage());
+				goHome.doSomething();
+			}
+		}
+	}
+	
+	public interface Message
+	{
+		public void doSomething();
+	}
+
+	public class BasicMessage implements Message
+	{
+
+		public BasicMessage() {}
+
+		public void doSomething()
+		{
+			//Bubble goes here!
+		}
+	}
+
+	public class MessageDecorator implements Message
+	{
+		protected Message message;
+		
+		public MessageDecorator(Message message)
+		{
+			this.message = message;
+		}
+		
+		public void doSomething()
+		{
+			this.message.doSomething();
+		}
+	}
+
+	public class DontGiveUp extends MessageDecorator
+	{
+		public DontGiveUp(Message message)
+		{
+			super(message);
+		}
+		
+		public void doSomething()
+		{
+			state = 2;
+			//Put text "Dont give up" inside the bubble
+			
+			repaint();
+		}
+	}
+
+	public class YouCanDoIt extends MessageDecorator
+	{
+		public YouCanDoIt(Message message)
+		{
+			super(message);
+		}
+		
+		public void doSomething()
+		{
+			super.doSomething();
+			state = 3;
+			
+			//Put text "You can do it!" inside the bubble
+			
+			repaint();
+		}
+	}
+	
+	public class GoHome extends MessageDecorator
+	{
+		public GoHome(Message message)
+		{
+			super(message);
+		}
+		
+		public void doSomething()
+		{
+			super.doSomething();
 			state = 4;
+			
+			//Put text "GO HOME!" inside the bubble
+			
 			repaint();
 		}
 	}
