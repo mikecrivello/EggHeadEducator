@@ -15,6 +15,7 @@ import java.awt.event.ItemListener;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Observer;
 
 import javax.swing.*;
 import javax.swing.text.Document;
@@ -35,15 +36,17 @@ private JButton button2;
 private JButton button3;
 private JButton button4;
 private JTextField text;
+private AssessorObservable AssessorO;
 
-
-public Assessor()
+public Assessor(AssessorObservable AssessorO)
 {
 	questionPanel = new JPanel();
 	questionPanel.setPreferredSize(new Dimension(350, 100));
 
 	answerPanel = new JPanel();
 	answerPanel.setPreferredSize(new Dimension(500, 220));
+	
+	this.AssessorO = AssessorO;
 
 	JSplitPane sp = new JSplitPane(JSplitPane.VERTICAL_SPLIT, questionPanel, answerPanel);
 	add(sp);
@@ -74,8 +77,29 @@ else if(state == 4)
 }
 else
 {
+	questionPanel.add(Box.createRigidArea(new Dimension(0, 90)));
 	questionPanel.add(new JLabel("Author Name: Andre Wijaya"));
+	JPanel panel = new JPanel();
+	answerPanel.setLayout(new BoxLayout(answerPanel, BoxLayout.Y_AXIS));
+	
+	JButton start = new JButton("Start Quiz!");
+	start.setPreferredSize(new Dimension(250, 30));
+	panel.add(start);
+	
+	answerPanel.add(Box.createRigidArea(new Dimension(0, 80)));
+	answerPanel.add(panel);
+	
+	start.addActionListener(new StartButtonListener());
 }
+}
+
+private class StartButtonListener implements ActionListener
+{
+	public void actionPerformed(ActionEvent event)
+	{
+		JOptionPane.showMessageDialog(null, "Start Quiz!");
+		
+	}
 }
 
 public void menu()
@@ -85,10 +109,13 @@ public void menu()
 	
 	JButton hint = new JButton("HINT");
 	JButton research = new JButton("RESEARCH");
+	JButton next = new JButton("NEXT");
 	hint.setPreferredSize(new Dimension(100, 20));
 	research.setPreferredSize(new Dimension(100, 20));
+	next.setPreferredSize(new Dimension(100, 20));
 	panel.add(hint);
 	panel.add(research);
+	panel.add(next);
 	
 	String[] menus = {"Answer 1", "Correct Answer", "Answer 3" , "Answer 4"};
 	menu = new JComboBox(menus);
@@ -102,6 +129,7 @@ public void menu()
 	
 	hint.addActionListener(new HintButtonListener());
 	research.addActionListener(new ResearchButtonListener());
+	next.addActionListener(new NextButtonListener());
 }
 
 private class ComboBoxListener implements ActionListener
@@ -113,11 +141,13 @@ private class ComboBoxListener implements ActionListener
 		{
 			Message correctMessage = new CorrectAnswer(new BasicMessage(type, true));
 			correctMessage.doSomething();
+			AssessorO.correctness(true);
 		}
 		else
 		{
 			Message wrongMessage = new WrongAnswer(new BasicMessage(type, false));
 			wrongMessage.doSomething();
+			AssessorO.correctness(false);
 		}
 	}
 }
@@ -132,10 +162,13 @@ public void checkboxes()
 	
 	JButton hint = new JButton("HINT");
 	JButton research = new JButton("RESEARCH");
+	JButton next = new JButton("NEXT");
 	hint.setPreferredSize(new Dimension(100, 20));
 	research.setPreferredSize(new Dimension(100, 20));
+	next.setPreferredSize(new Dimension(100, 20));
 	panel.add(hint);
 	panel.add(research);
+	panel.add(next);
 	
 	check1 = new JCheckBox("Answer 1");
 	check2 = new JCheckBox("Correct Answer");
@@ -159,6 +192,7 @@ public void checkboxes()
 	
 	hint.addActionListener(new HintButtonListener());
 	research.addActionListener(new ResearchButtonListener());
+	next.addActionListener(new NextButtonListener());
 }
 
 private class DoneButtonListener implements ActionListener
@@ -172,6 +206,7 @@ private class DoneButtonListener implements ActionListener
 			result = check2.getText() + " and " + check3.getText();
 			Message correctMessage = new CorrectAnswer(new BasicMessage(result, true));
 			correctMessage.doSomething();
+			AssessorO.correctness(true);
 		}
 		else
 		{
@@ -194,6 +229,7 @@ private class DoneButtonListener implements ActionListener
 			
 			Message wrongMessage = new WrongAnswer(new BasicMessage(result, false));
 			wrongMessage.doSomething();
+			AssessorO.correctness(false);
 		}
 	}
 }
@@ -207,10 +243,13 @@ public void buttons()
 	
 	JButton hint = new JButton("HINT");
 	JButton research = new JButton("RESEARCH");
+	JButton next = new JButton("NEXT");
 	hint.setPreferredSize(new Dimension(100, 20));
 	research.setPreferredSize(new Dimension(100, 20));
+	next.setPreferredSize(new Dimension(100, 20));
 	panel.add(hint);
 	panel.add(research);
+	panel.add(next);
 	
 	button1 = new JButton("Answer 1");
 	button2 = new JButton("Correct Answer");
@@ -241,6 +280,7 @@ public void buttons()
 	
 	hint.addActionListener(new HintButtonListener());
 	research.addActionListener(new ResearchButtonListener());
+	next.addActionListener(new NextButtonListener());
 }
 
 private class ButtonListener implements ActionListener
@@ -253,6 +293,7 @@ public void actionPerformed(ActionEvent event)
 	 {
 		Message correctMessage = new CorrectAnswer(new BasicMessage(button2.getText(), true));
 		correctMessage.doSomething();
+		AssessorO.correctness(true);
 	 }
 	 else
 	 {
@@ -271,6 +312,7 @@ public void actionPerformed(ActionEvent event)
 		 
 		Message wrongMessage = new WrongAnswer(new BasicMessage(result, false));
 		wrongMessage.doSomething();
+		AssessorO.correctness(false);
 	 }
 }
 }
@@ -282,10 +324,13 @@ public void textfield()
 	
 	JButton hint = new JButton("HINT");
 	JButton research = new JButton("RESEARCH");
+	JButton next = new JButton("NEXT");
 	hint.setPreferredSize(new Dimension(100, 20));
 	research.setPreferredSize(new Dimension(100, 20));
+	next.setPreferredSize(new Dimension(100, 20));
 	panel.add(hint);
 	panel.add(research);
+	panel.add(next);
 	
 	text = new JTextField();
 	text.setPreferredSize(new Dimension(400, 100));
@@ -297,6 +342,7 @@ public void textfield()
 	text.addActionListener(new TextFieldListener());
 	hint.addActionListener(new HintButtonListener());
 	research.addActionListener(new ResearchButtonListener());
+	next.addActionListener(new NextButtonListener());
 }
 
 private class TextFieldListener implements ActionListener
@@ -310,11 +356,13 @@ public void actionPerformed(ActionEvent event)
 		{
 			Message correctMessage = new CorrectAnswer(new BasicMessage(text.getText(), true));
 			correctMessage.doSomething();
+			AssessorO.correctness(true);
 		}
 		else
 		{
 			Message wrongMessage = new WrongAnswer(new BasicMessage(text.getText(), false));
 			wrongMessage.doSomething();
+			AssessorO.correctness(false);
 		}
 	}
 }
@@ -340,6 +388,14 @@ private class ResearchButtonListener implements ActionListener
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(null, "Failed to load Webpage!");
 		}
+	}
+}
+
+private class NextButtonListener implements ActionListener
+{
+	public void actionPerformed(ActionEvent event)
+	{
+		JOptionPane.showMessageDialog(null, "NEXT QUESTION");
 	}
 }
 
