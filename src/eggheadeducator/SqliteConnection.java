@@ -20,7 +20,7 @@ public class SqliteConnection {
 		
 		try {
 			Class.forName("org.sqlite.JDBC");
-			Connection conn = DriverManager.getConnection("jdbc:sqlite:EggHeadEducator\\StudentGrades.sqlite");
+			Connection conn = DriverManager.getConnection("jdbc:sqlite:StudentGrades.sqlite");
 			//JOptionPane.showMessageDialog(null, "Connection successful");
 			return conn;
 		} catch(Exception e) {
@@ -33,7 +33,7 @@ public class SqliteConnection {
 		
 		try {
 			Class.forName("org.sqlite.JDBC");
-			Connection conn = DriverManager.getConnection("jdbc:sqlite:EggHeadEducator\\GradeInfo.sqlite");
+			Connection conn = DriverManager.getConnection("jdbc:sqlite:GradeInfo.sqlite");
 			//JOptionPane.showMessageDialog(null, "Connection successful");
 			return conn;
 		} catch(Exception e) {
