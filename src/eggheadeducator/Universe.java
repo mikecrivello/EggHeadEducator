@@ -52,6 +52,11 @@ public class Universe extends JFrame {
 	}
 
 	public Universe() {
+		AssessorObservable AssessorO = new AssessorObservable();
+		Companion Companion = new Companion();
+		
+		AssessorO.addObserver(Companion);
+		
 		setTitle("Egghead Educator");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1103, 984);
@@ -62,12 +67,12 @@ public class Universe extends JFrame {
 	
 		contentPane.setLayout(null);
 		
-		JPanel a = new Companion();
+		JPanel a = Companion;
 		a.setBounds(10, 11, 522, 360);
 		contentPane.add(a);
 		a.setVisible(true);
 		
-		JPanel b = new Assessor();
+		JPanel b = new Assessor(AssessorO);
 		b.setBounds(20, 382, 522, 340);
 		contentPane.add(b);
 		b.setVisible(true);
