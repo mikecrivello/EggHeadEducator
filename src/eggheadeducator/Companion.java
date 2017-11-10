@@ -10,6 +10,7 @@ package eggheadeducator;
 import java.awt.*;
 import javax.swing.*;
 import java.util.Observer;
+import java.util.Observable;
 
 
 public class Companion extends JPanel implements Runnable, Observer
