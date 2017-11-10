@@ -9,9 +9,10 @@ package eggheadeducator;
  */
 import java.awt.*;
 import javax.swing.*;
+import java.util.Observer;
 
 
-public class Companion extends JPanel implements Runnable
+public class Companion extends JPanel implements Runnable, Observer
 {
 	public Companion()
 	{
@@ -304,4 +305,22 @@ public class Companion extends JPanel implements Runnable
     {
 		this.state = state;
     }
+    
+    @Override
+	public void update(Observable o, Object arg) 
+	{
+		// TODO Auto-generated method stub
+		boolean correct = ((AssessorObservable)o).getCorrectness();
+		
+		if(correct)
+		{
+			state = 1;
+			repaint();
+		}
+		else
+		{
+			state = 4;
+			repaint();
+		}
+	}
 }
