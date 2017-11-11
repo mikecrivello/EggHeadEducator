@@ -1,0 +1,73 @@
+/**
+ * Project: 4
+ * @author Darshan Prakash
+ * Student ID: 1213487299
+ * Team: 7
+ * Recitation: 6
+ * Description: Tutor class that displays HTML file
+ */
+
+package eggheadeducator;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.*;
+
+
+public class ControlCenter
+{
+	private static ConctrolCenter firstInstance = null; 
+	
+	protected ControlCenter(){}
+	
+	public static ControlCenter getInstance() 
+	{
+		if(firstInstance == null) 
+		{
+			firstInstance = new ControlCenter();
+		}
+		
+		return firstInstance;
+	}
+	//no of lessons and questions in lessons
+	
+	private final int numQuiz = 1;
+	
+	private final int numQues = 4;
+
+	private float startTime;
+
+	private int[] correctAnswers = new int[numQuiz];
+	
+	private int[] incorrectAnswers = new int[numQuiz];
+	
+	private float[] averageTime = new float[numQuiz];
+
+
+	
+
+	public void startTimer()
+	{
+		startTime= System.currentTimeMillis();
+	}
+
+	public void endTimer(int quizNum)
+	{
+		averageTime[quizNum]= ((System.currentTimeMillis() - startTime)/numQues);
+
+		System.out.println("Avg Time: " +averageTime[quizNum]);
+	}
+
+	public void numCorrect(int quizNum, int numCorrect)
+	{
+		correctAnswers[quizNum]= numCorrect;
+		incorrectAnswers[quizNum]= numQues- numCorrect;
+	}
+	
+    public void changeState(int state)
+    {
+		this.state = state;
+    }	
+	
+	
+}
